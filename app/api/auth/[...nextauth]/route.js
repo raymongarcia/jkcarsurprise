@@ -4,7 +4,7 @@ import { connectMongoDB } from "../../../../lib/mongodb";
 import bcrypt from "bcryptjs";
 import User from "../../../../models/user"
 
-const authOptions = {
+export const authOptions = {
     providers: [
         CredentialsProvider({
             name: "credentials",
@@ -37,7 +37,7 @@ const authOptions = {
         strategy: "jwt",
     },
     secret: process.env.NEXTAUTH_SECRET,
-    page: {
+    pages: {
         signIn: "/",
     }
 }
