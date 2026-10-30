@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 
 export default function RegisterForm() {
@@ -12,7 +12,7 @@ export default function RegisterForm() {
 
   const router = useRouter();
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!name || !email || !password) {
@@ -48,7 +48,7 @@ export default function RegisterForm() {
         }),
       });
       if (res.ok) {
-        const form = e.target;
+        const form = e.currentTarget as HTMLFormElement;
         form.reset();
         router.push("/");
       } else {
@@ -90,7 +90,7 @@ export default function RegisterForm() {
             </div>
           )}
 
-          <Link className="text-sm mt-3 text-right" href={"/"}>
+          <Link className="text-sm mt-3 text-right" href={"/login"}>
             Already have an account? <span className="underline">Login</span>
           </Link>
         </form>
