@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import packages from "@/lib/packages";
+import FacebookContactLink from "@/app/components/FacebookContactLink";
 
 const initialForm = {
   fullName: "",
@@ -198,6 +199,10 @@ export default function CheckoutPage() {
             <ul className="mt-3 space-y-3 text-sm text-slate-300">
               {selectedPackage.inclusions.map((item) => <li key={item}>• {item}</li>)}
             </ul>
+            <div className="mt-6 border-t border-white/10 pt-5">
+              <p className="mb-2 text-sm text-slate-300">Questions about a package?</p>
+              <FacebookContactLink />
+            </div>
           </div>
         </aside>
       </section>

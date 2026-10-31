@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import packages from "@/lib/packages";
+import FacebookContactLink from "@/app/components/FacebookContactLink";
 
 const pricesByCurrency = {
   PHP: (value: number) => `₱${value.toLocaleString()}`,
@@ -331,10 +332,11 @@ export default function Home() {
       <footer className="border-t border-white/10 bg-slate-950">
         <div className="mx-auto flex max-w-7xl flex-col gap-6 px-6 py-8 text-sm text-slate-400 md:flex-row md:items-center md:justify-between">
           <div>© 2026 JK Car Surprise</div>
-          <div className="flex gap-6">
+          <div className="flex flex-wrap items-center gap-6">
             <Link href="#services" className="hover:text-white">Services</Link>
             <Link href="/shop" className="hover:text-white">Shop</Link>
             <Link href="/checkout" className="hover:text-white">Checkout</Link>
+            <FacebookContactLink />
           </div>
         </div>
       </footer>

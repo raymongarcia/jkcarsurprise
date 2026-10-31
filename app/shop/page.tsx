@@ -1,5 +1,6 @@
 import Link from "next/link";
 import packages from "@/lib/packages";
+import FacebookContactLink from "@/app/components/FacebookContactLink";
 
 export default function ShopPage() {
   return (
@@ -48,6 +49,13 @@ export default function ShopPage() {
           ))}
         </div>
       </section>
+
+      <footer className="border-t border-white/10 bg-slate-950">
+        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-8 text-sm text-slate-400 sm:flex-row sm:items-center sm:justify-between">
+          <span>© 2026 JK Car Surprise</span>
+          <FacebookContactLink />
+        </div>
+      </footer>
     </main>
   );
 }
