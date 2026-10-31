@@ -17,9 +17,9 @@ const bookingSchema = new Schema(
       required: true,
       trim: true,
     },
-    theme: {
+    motif: {
       type: String,
-      default: "Birthday",
+      default: "",
       trim: true,
     },
     occasion: {

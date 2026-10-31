@@ -1,25 +1,5 @@
 import Link from "next/link";
-
-const catalog = [
-  {
-    title: "Classic Reveal",
-    price: "₱8,900",
-    tag: "For quick special moments",
-    details: ["Custom note card", "Curbside reveal setup", "Photo-ready finish"],
-  },
-  {
-    title: "Luxury Launch",
-    price: "₱16,500",
-    tag: "Most requested",
-    details: ["Premium vehicle styling", "Chauffeur arrival setup", "Professional photography"],
-  },
-  {
-    title: "VIP Arrival",
-    price: "₱32,000",
-    tag: "Full concierge experience",
-    details: ["Custom route planning", "Luxury detail styling", "Private reveal coordination"],
-  },
-];
+import packages from "@/lib/packages";
 
 export default function ShopPage() {
   return (
@@ -45,13 +25,16 @@ export default function ShopPage() {
         </div>
 
         <div className="grid gap-8 md:grid-cols-3">
-          {catalog.map((item) => (
+          {packages.map((item) => (
             <div key={item.title} className="rounded-[1.75rem] border border-white/10 bg-white/5 p-6">
               <div className="text-sm font-semibold uppercase tracking-[0.2em] text-amber-300">{item.tag}</div>
               <h2 className="mt-4 text-3xl font-black text-white">{item.title}</h2>
-              <div className="mt-5 text-4xl font-black text-white">{item.price}</div>
-              <ul className="mt-6 space-y-3 text-slate-200">
-                {item.details.map((detail) => (
+              <div className="mt-5 text-4xl font-black text-white">₱{item.price.toLocaleString()}</div>
+              <p className="mt-4 text-sm text-slate-300">{item.description}</p>
+              <p className="mt-6 text-sm font-semibold text-amber-300">Suggested inclusions (customizable)</p>
+              <p className="mt-1 text-xs text-slate-400">Draft quantities and cash amounts; confirm final inclusions and pricing when booking.</p>
+              <ul className="mt-3 space-y-3 text-slate-200">
+                {item.inclusions.map((detail) => (
                   <li key={detail} className="flex items-center gap-3">
                     <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500/20 text-xs text-emerald-300">✓</span>
                     {detail}

@@ -2,35 +2,12 @@
 
 import Link from "next/link";
 import { useState } from "react";
-
-const basePrices = {
-  "Classic Reveal": 8900,
-  "Luxury Launch": 16500,
-  "VIP Arrival": 32000,
-};
+import packages from "@/lib/packages";
 
 const pricesByCurrency = {
   PHP: (value: number) => `₱${value.toLocaleString()}`,
   USD: (value: number) => `$${(value / 58).toFixed(2)}`,
 };
-
-const packages = [
-  {
-    title: "Classic Reveal",
-    description: "A surprise delivery experience with premium styling, custom note card, and curbside reveal setup.",
-    badge: "Most popular",
-  },
-  {
-    title: "Luxury Launch",
-    description: "A high-impact reveal package with chauffeur touchpoints, vehicle styling, and premium photo coverage.",
-    badge: "Best value",
-  },
-  {
-    title: "VIP Arrival",
-    description: "A fully customized surprise service for birthdays, anniversaries, and milestone celebrations.",
-    badge: "Premium",
-  },
-];
 
 const highlights = [
   "Custom satin reveal styling",
@@ -62,7 +39,7 @@ const testimonials = [
   },
 ];
 
-const themeExamples = [
+const motifExamples = [
   {
     title: "Birthday Bash",
     accent: "from-pink-500 to-rose-500",
@@ -79,7 +56,7 @@ const themeExamples = [
     text: "Soft neon-inspired styling with elegant lettering, floral accents, and a cinematic reveal concept.",
   },
   {
-    title: "Custom Theme",
+    title: "Custom Motif",
     accent: "from-cyan-500 to-sky-500",
     text: "Any idea your client wants — sports, debut, corporate campaign, wedding, or personal milestone.",
   },
@@ -89,7 +66,7 @@ export default function Home() {
   const [currency, setCurrency] = useState<"PHP" | "USD">("PHP");
 
   const displayPrice = (value: number) => pricesByCurrency[currency](value);
-  const featuredPrice = displayPrice(basePrices["Luxury Launch"]);
+  const featuredPrice = displayPrice(packages[1].price);
 
   return (
     <main className="bg-slate-950 text-white">
@@ -156,10 +133,10 @@ export default function Home() {
               Car surprise service in the Philippines
             </span>
             <h1 className="mt-6 max-w-xl text-4xl font-black leading-tight tracking-tight text-white md:text-6xl">
-              We design the back of the car to match your theme and create a surprise people will remember.
+              We design the back of the car to match your motif and create a surprise people will remember.
             </h1>
             <p className="mt-6 max-w-xl text-lg text-slate-300">
-              JK Car Surprise is a customized service where we style the rear of the vehicle to fit the client’s theme — birthdays, anniversaries, graduations, proposals, and any concept they want to celebrate in a big, cinematic way.
+              JK Car Surprise is a customized service where we style the rear of the vehicle to fit the client’s motif — birthdays, anniversaries, graduations, proposals, and any concept they want to celebrate in a big, cinematic way.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
               <Link href="/shop" className="rounded-full bg-amber-400 px-6 py-3 font-semibold text-slate-950 transition hover:bg-amber-300">
@@ -216,16 +193,16 @@ export default function Home() {
       <section id="services" className="mx-auto max-w-7xl px-6 py-20">
         <div className="mb-12 text-center">
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-amber-300">What we offer</p>
-          <h2 className="mt-4 text-3xl font-black text-white md:text-5xl">Themed car back design for unforgettable moments</h2>
+          <h2 className="mt-4 text-3xl font-black text-white md:text-5xl">Motif car back design for unforgettable moments</h2>
         </div>
 
         <div className="mb-16 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-          {themeExamples.map((theme) => (
-            <div key={theme.title} className="overflow-hidden rounded-[1.5rem] border border-white/10 bg-slate-900/80">
-              <div className={`h-36 bg-gradient-to-br ${theme.accent} p-4`}>
+          {motifExamples.map((motif) => (
+            <div key={motif.title} className="overflow-hidden rounded-[1.5rem] border border-white/10 bg-slate-900/80">
+              <div className={`h-36 bg-gradient-to-br ${motif.accent} p-4`}>
                 <div className="flex h-full items-end justify-between">
                   <span className="rounded-full bg-slate-950/70 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-white/90">
-                    Theme
+                    Motif
                   </span>
                   <span className="rounded-full bg-white/20 px-2 py-1 text-xs font-semibold text-white">
                     Custom
@@ -233,8 +210,8 @@ export default function Home() {
                 </div>
               </div>
               <div className="p-5">
-                <h3 className="text-xl font-bold text-white">{theme.title}</h3>
-                <p className="mt-3 text-sm text-slate-300">{theme.text}</p>
+                <h3 className="text-xl font-bold text-white">{motif.title}</h3>
+                <p className="mt-3 text-sm text-slate-300">{motif.text}</p>
               </div>
             </div>
           ))}
@@ -250,12 +227,14 @@ export default function Home() {
                 </span>
               </div>
               <div className="mt-6 flex items-end gap-2">
-                <span className="text-4xl font-black text-white">{displayPrice(basePrices[pkg.title as keyof typeof basePrices])}</span>
+                <span className="text-4xl font-black text-white">{displayPrice(pkg.price)}</span>
                 <span className="mb-1 text-slate-400">starting</span>
               </div>
               <p className="mt-5 text-slate-300">{pkg.description}</p>
+              <p className="mt-6 text-sm font-semibold text-amber-300">Suggested inclusions (customizable)</p>
+              <p className="mt-1 text-xs text-slate-400">Draft quantities and cash amounts; confirm final inclusions and pricing when booking.</p>
               <ul className="mt-6 space-y-3 text-sm text-slate-200">
-                {highlights.slice(0, 4).map((item) => (
+                {pkg.inclusions.map((item) => (
                   <li key={item} className="flex items-center gap-3">
                     <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500/20 text-xs text-emerald-300">
                       ✓

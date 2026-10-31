@@ -9,7 +9,8 @@ type Booking = {
   email: string;
   packageName: string;
   occasion: string;
-  theme: string;
+  motif: string;
+  theme?: string;
   estimatedCost: number;
   status: "pending" | "confirmed" | "completed";
   deliveryDate?: string;
@@ -23,7 +24,7 @@ const emptyForm = {
   email: "",
   packageName: "Classic Reveal",
   occasion: "",
-  theme: "Birthday",
+  motif: "",
   estimatedCost: 0,
   status: "pending",
   deliveryDate: "",
@@ -58,7 +59,7 @@ export default function AdminBookings() {
           email: first.email || "",
           packageName: first.packageName || "Classic Reveal",
           occasion: first.occasion || "",
-          theme: first.theme || "Birthday",
+          motif: first.motif || first.theme || "",
           estimatedCost: first.estimatedCost || 0,
           status: first.status || "pending",
           deliveryDate: first.deliveryDate ? new Date(first.deliveryDate).toISOString().slice(0, 10) : "",
@@ -96,7 +97,7 @@ export default function AdminBookings() {
       email: booking.email || "",
       packageName: booking.packageName || "Classic Reveal",
       occasion: booking.occasion || "",
-      theme: booking.theme || "Birthday",
+      motif: booking.motif || booking.theme || "",
       estimatedCost: booking.estimatedCost || 0,
       status: booking.status || "pending",
       deliveryDate: booking.deliveryDate ? new Date(booking.deliveryDate).toISOString().slice(0, 10) : "",
@@ -284,7 +285,7 @@ export default function AdminBookings() {
                       <span>{booking.packageName}</span>
                       <span>₱{Number(booking.estimatedCost || 0).toLocaleString()}</span>
                     </div>
-                    <div className="mt-2 text-sm text-slate-400">Theme: {booking.theme || "Custom"}</div>
+                    <div className="mt-2 text-sm text-slate-400">Motif: {booking.motif || booking.theme || "Custom"}</div>
                   </button>
                 ))
               )}
@@ -324,8 +325,8 @@ export default function AdminBookings() {
                       </select>
                     </label>
                     <label className="block text-sm text-slate-300">
-                      Theme
-                      <input name="theme" value={form.theme} onChange={handleChange} className="mt-2" />
+                      Motif
+                      <input name="motif" value={form.motif} onChange={handleChange} className="mt-2" />
                     </label>
                     <label className="block text-sm text-slate-300">
                       Estimated cost (PHP)

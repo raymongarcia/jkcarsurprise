@@ -21,7 +21,7 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { fullName, email, packageName, occasion, message } = body;
+    const { fullName, email, packageName, motif, occasion, message } = body;
 
     if (!fullName || !email || !packageName) {
       return NextResponse.json(
@@ -36,6 +36,7 @@ export async function POST(request: NextRequest) {
       fullName,
       email,
       packageName,
+      motif: motif || "",
       occasion: occasion || "",
       message: message || "",
       status: "pending",

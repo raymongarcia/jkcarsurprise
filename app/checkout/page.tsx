@@ -2,11 +2,13 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import packages from "@/lib/packages";
 
 const initialForm = {
   fullName: "",
   email: "",
   packageName: "Luxury Launch",
+  motif: "",
   occasion: "",
   message: "",
 };
@@ -15,6 +17,7 @@ export default function CheckoutPage() {
   const [form, setForm] = useState(initialForm);
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<{ type: "success" | "error"; message: string } | null>(null);
+  const selectedPackage = packages.find((item) => item.title === form.packageName) ?? packages[0];
 
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -111,10 +114,21 @@ export default function CheckoutPage() {
             <div>
               <label className="mb-2 block text-sm text-slate-300">Service package</label>
               <select name="packageName" value={form.packageName} onChange={handleChange}>
-                <option value="Classic Reveal">Classic Reveal</option>
-                <option value="Luxury Launch">Luxury Launch</option>
-                <option value="VIP Arrival">VIP Arrival</option>
+                {packages.map((item) => (
+                  <option key={item.title} value={item.title}>{item.title}</option>
+                ))}
               </select>
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm text-slate-300">Motif</label>
+              <input
+                type="text"
+                name="motif"
+                value={form.motif}
+                onChange={handleChange}
+                placeholder="Birthday, anniversary, or your custom idea"
+              />
             </div>
 
             <div>
@@ -165,8 +179,8 @@ export default function CheckoutPage() {
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-amber-300">Order summary</p>
           <div className="mt-6 rounded-xl border border-white/10 bg-white/5 p-5">
             <div className="flex items-center justify-between text-slate-300">
-              <span>Luxury Launch</span>
-              <span>₱16,500</span>
+              <span>{selectedPackage.title}</span>
+              <span>₱{selectedPackage.price.toLocaleString()}</span>
             </div>
             <div className="mt-4 flex items-center justify-between border-t border-white/10 pt-4 text-slate-300">
               <span>Service fee</span>
@@ -174,15 +188,16 @@ export default function CheckoutPage() {
             </div>
             <div className="mt-4 flex items-center justify-between border-t border-white/10 pt-4 text-lg font-bold text-white">
               <span>Total</span>
-              <span>₱17,700</span>
+              <span>₱{(selectedPackage.price + 1200).toLocaleString()}</span>
             </div>
           </div>
 
-          <div className="mt-8 space-y-3 text-sm text-slate-300">
-            <div>• Personalized reveal planning</div>
-            <div>• Professional styling team</div>
-            <div>• Flexible scheduling support</div>
-            <div>• Follow-up quote within 24 hours</div>
+          <div className="mt-8">
+            <p className="text-sm font-semibold text-amber-300">Suggested inclusions (customizable)</p>
+            <p className="mt-1 text-xs text-slate-400">Draft quantities and cash amounts; confirm final inclusions and pricing when booking.</p>
+            <ul className="mt-3 space-y-3 text-sm text-slate-300">
+              {selectedPackage.inclusions.map((item) => <li key={item}>• {item}</li>)}
+            </ul>
           </div>
         </aside>
       </section>
