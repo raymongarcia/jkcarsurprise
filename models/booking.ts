@@ -36,6 +36,25 @@ const bookingSchema = new Schema(
       type: Number,
       default: 0,
     },
+    paymentAmount: {
+      type: Number,
+      default: 0,
+    },
+    paymentStatus: {
+      type: String,
+      enum: ["unpaid", "paid", "expired"],
+      default: "unpaid",
+    },
+    stripeCheckoutSessionId: {
+      type: String,
+      default: "",
+      select: false,
+    },
+    stripePaymentIntentId: {
+      type: String,
+      default: "",
+      select: false,
+    },
     deliveryDate: {
       type: Date,
       default: null,

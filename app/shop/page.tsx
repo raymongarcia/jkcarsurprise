@@ -42,7 +42,7 @@ export default function ShopPage() {
                   </li>
                 ))}
               </ul>
-              <Link href="/checkout" className="mt-8 inline-flex w-full justify-center rounded-full bg-amber-400 px-4 py-3 font-semibold text-slate-950 transition hover:bg-amber-300">
+              <Link href={`/checkout?package=${encodeURIComponent(item.title)}`} className="mt-8 inline-flex w-full justify-center rounded-full bg-amber-400 px-4 py-3 font-semibold text-slate-950 transition hover:bg-amber-300">
                 Reserve this package
               </Link>
             </div>

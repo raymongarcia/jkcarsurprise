@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { Suspense, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import packages from "@/lib/packages";
 import FacebookContactLink from "@/app/components/FacebookContactLink";
 
@@ -14,10 +15,14 @@ const initialForm = {
   message: "",
 };
 
-export default function CheckoutPage() {
-  const [form, setForm] = useState(initialForm);
+function CheckoutForm() {
+  const searchParams = useSearchParams();
+  const requestedPackage = searchParams.get("package");
+  const initialPackageName =
+    packages.find((item) => item.title === requestedPackage)?.title ?? initialForm.packageName;
+  const [form, setForm] = useState({ ...initialForm, packageName: initialPackageName });
   const [loading, setLoading] = useState(false);
-  const [status, setStatus] = useState<{ type: "success" | "error"; message: string } | null>(null);
+  const [errorMessage, setErrorMessage] = useState("");
   const selectedPackage = packages.find((item) => item.title === form.packageName) ?? packages[0];
 
   const handleChange = (
@@ -30,7 +35,7 @@ export default function CheckoutPage() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
-    setStatus(null);
+    setErrorMessage("");
 
     try {
       const response = await fetch("/api/bookings", {
@@ -47,19 +52,16 @@ export default function CheckoutPage() {
         throw new Error(data.message || "Unable to submit booking.");
       }
 
-      setStatus({
-        type: "success",
-        message: "Booking request sent successfully. We will contact you soon.",
-      });
-      setForm(initialForm);
+      if (typeof data.checkoutUrl !== "string") {
+        throw new Error("Stripe did not return a checkout link. Please try again.");
+      }
+      window.location.assign(data.checkoutUrl);
     } catch (error) {
-      setStatus({
-        type: "error",
-        message:
-          error instanceof Error
-            ? error.message
-            : "Something went wrong while creating the booking.",
-      });
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : "Something went wrong while creating the booking."
+      );
     } finally {
       setLoading(false);
     }
@@ -154,15 +156,11 @@ export default function CheckoutPage() {
               />
             </div>
 
-            {status && (
+            {errorMessage && (
               <div
-                className={`rounded-xl border px-4 py-3 text-sm ${
-                  status.type === "success"
-                    ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-200"
-                    : "border-red-500/30 bg-red-500/10 text-red-200"
-                }`}
+                className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200"
               >
-                {status.message}
+                {errorMessage}
               </div>
             )}
 
@@ -171,8 +169,11 @@ export default function CheckoutPage() {
               disabled={loading}
               className="rounded-full bg-amber-400 px-6 py-3 font-semibold text-slate-950 transition hover:bg-amber-300 disabled:cursor-not-allowed disabled:opacity-70"
             >
-              {loading ? "Submitting..." : "Confirm booking request"}
+              {loading ? "Opening secure checkout..." : "Pay securely with Stripe"}
             </button>
+            <p className="text-xs text-slate-400">
+              Your reservation is pending until payment is received. Final event details will be confirmed with you.
+            </p>
           </form>
         </div>
 
@@ -207,5 +208,19 @@ export default function CheckoutPage() {
         </aside>
       </section>
     </main>
+  );
+}
+
+export default function CheckoutPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="flex min-h-screen items-center justify-center bg-slate-950 text-white">
+          Loading checkout...
+        </main>
+      }
+    >
+      <CheckoutForm />
+    </Suspense>
   );
 }

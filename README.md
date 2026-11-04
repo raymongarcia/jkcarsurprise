@@ -16,6 +16,24 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Stripe reservation payments
+
+Reservations are paid through Stripe Checkout using the selected package price plus the ₱1,200 service fee. Add these server-side environment variables:
+
+```env
+STRIPE_SECRET_KEY=sk_test_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+```
+
+In development, forward Stripe events to the webhook endpoint with the Stripe CLI:
+
+```bash
+stripe listen --forward-to localhost:3000/api/stripe/webhook
+```
+
+Use the webhook signing secret printed by the CLI as `STRIPE_WEBHOOK_SECRET`. In production, configure a Stripe webhook endpoint for `/api/stripe/webhook` and subscribe to `checkout.session.completed`, `checkout.session.async_payment_succeeded`, and `checkout.session.expired`. Set `NEXT_PUBLIC_SITE_URL` to the deployed site URL.
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.

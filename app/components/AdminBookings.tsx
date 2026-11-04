@@ -12,6 +12,8 @@ type Booking = {
   motif: string;
   theme?: string;
   estimatedCost: number;
+  paymentAmount: number;
+  paymentStatus: "unpaid" | "paid" | "expired";
   status: "pending" | "confirmed" | "completed";
   deliveryDate?: string;
   imageUrls?: string[];
@@ -81,7 +83,10 @@ export default function AdminBookings() {
   }, [status]);
 
   const summary = useMemo(() => {
-    const totalRevenue = bookings.reduce((sum, item) => sum + Number(item.estimatedCost || 0), 0);
+    const totalRevenue = bookings.reduce(
+      (sum, item) => sum + (item.paymentStatus === "paid" ? Number(item.paymentAmount || 0) : 0),
+      0
+    );
     return {
       total: bookings.length,
       pending: bookings.filter((item) => item.status === "pending").length,
@@ -232,7 +237,7 @@ export default function AdminBookings() {
             <div className="mt-3 text-3xl font-black text-emerald-300">{summary.confirmed}</div>
           </div>
           <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
-            <div className="text-sm text-slate-400">Revenue</div>
+            <div className="text-sm text-slate-400">Revenue collected</div>
             <div className="mt-3 text-3xl font-black text-white">₱{summary.revenue.toLocaleString()}</div>
           </div>
         </div>
@@ -286,6 +291,9 @@ export default function AdminBookings() {
                       <span>₱{Number(booking.estimatedCost || 0).toLocaleString()}</span>
                     </div>
                     <div className="mt-2 text-sm text-slate-400">Motif: {booking.motif || booking.theme || "Custom"}</div>
+                    <div className="mt-2 text-xs uppercase tracking-wide text-slate-400">
+                      Payment: <span className={booking.paymentStatus === "paid" ? "text-emerald-300" : "text-amber-300"}>{booking.paymentStatus || "unpaid"}</span>
+                    </div>
                   </button>
                 ))
               )}
@@ -308,6 +316,15 @@ export default function AdminBookings() {
               {selectedId ? (
                 <div className="space-y-5">
                   <div className="grid gap-5 md:grid-cols-2">
+                    <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-slate-300">
+                      Payment status
+                      <div className={`mt-1 font-semibold ${bookings.find((booking) => booking._id === selectedId)?.paymentStatus === "paid" ? "text-emerald-300" : "text-amber-300"}`}>
+                        {bookings.find((booking) => booking._id === selectedId)?.paymentStatus || "unpaid"}
+                      </div>
+                      <div className="mt-1 text-xs text-slate-400">
+                        Paid: ₱{Number(bookings.find((booking) => booking._id === selectedId)?.paymentAmount || 0).toLocaleString()}
+                      </div>
+                    </div>
                     <label className="block text-sm text-slate-300">
                       Full name
                       <input name="fullName" value={form.fullName} onChange={handleChange} className="mt-2" />

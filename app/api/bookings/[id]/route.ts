@@ -37,7 +37,14 @@ export async function PATCH(
     const updatedBooking = await Booking.findByIdAndUpdate(
       id,
       {
-        ...body,
+        fullName: body.fullName,
+        email: body.email,
+        packageName: body.packageName,
+        occasion: body.occasion,
+        motif: body.motif,
+        message: body.message,
+        status: body.status,
+        deliveryDate: body.deliveryDate || null,
         imageUrls: Array.isArray(body.imageUrls) ? body.imageUrls : [],
         estimatedCost: Number(body.estimatedCost || 0),
       },
