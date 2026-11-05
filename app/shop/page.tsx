@@ -48,6 +48,19 @@ export default function ShopPage() {
             </div>
           ))}
         </div>
+
+        <div className="mt-8 rounded-[1.75rem] border border-amber-400/20 bg-amber-400/5 p-6 md:flex md:items-center md:justify-between md:gap-8">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-amber-300">Additional service</p>
+            <h2 className="mt-2 text-2xl font-bold text-white">Mobile Bar</h2>
+            <p className="mt-3 max-w-2xl text-slate-300">
+              Bring a mobile bar experience to your event. Contact us to discuss your plans, availability, and a custom quote.
+            </p>
+          </div>
+          <div className="mt-5 shrink-0 md:mt-0">
+            <FacebookContactLink />
+          </div>
+        </div>
       </section>
 
       <footer className="border-t border-white/10 bg-slate-950">
